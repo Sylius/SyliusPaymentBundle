@@ -2,6 +2,5 @@
 # (c) Paweł Jędrzejewski
 
 sylius:
-  form:
-    payment_method:
-      name: Namn
+  payment:
+    complete: Platba bola dokončená.
