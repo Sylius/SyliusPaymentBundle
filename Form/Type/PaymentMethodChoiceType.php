@@ -11,7 +11,6 @@
 
 namespace Sylius\Bundle\PaymentBundle\Form\Type;
 
-use Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\Form\Type\ResourceChoiceType;
 use Sylius\Component\Payment\Repository\PaymentMethodRepositoryInterface;
 use Symfony\Component\OptionsResolver\Options;
@@ -33,8 +32,12 @@ class PaymentMethodChoiceType extends ResourceChoiceType
         parent::setDefaultOptions($resolver);
 
         $queryBuilder = function (Options $options) {
-            return function (PaymentMethodRepositoryInterface $repository) use ($options){
-                return $repository->getQueryBuidlerByStatus($options['disabled']);
+            $reposiotryOptions = array(
+                'disabled' => $options['disabled'],
+            );
+
+            return function (PaymentMethodRepositoryInterface $repository) use ($reposiotryOptions) {
+                return $repository->getQueryBuidlerForChoiceType($reposiotryOptions);
             };
         };
 
@@ -45,4 +48,5 @@ class PaymentMethodChoiceType extends ResourceChoiceType
             ))
         ;
     }
+
 }

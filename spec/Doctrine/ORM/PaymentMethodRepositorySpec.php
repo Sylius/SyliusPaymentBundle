@@ -29,19 +29,23 @@ class PaymentMethodRepositorySpec extends ObjectBehavior
     function it_creates_query_builder_for_enable_status($em, QueryBuilder $builder)
     {
         $em->createQueryBuilder()->shouldBeCalled()->willReturn($builder);
-        $builder->select('o')->shouldBeCalled()->willReturn($builder);
-        $builder->from(Argument::any(), 'o')->shouldBeCalled()->willReturn($builder);
+        $builder->select('method')->shouldBeCalled()->willReturn($builder);
+        $builder->from(Argument::any(), 'method')->shouldBeCalled()->willReturn($builder);
         $builder->where('method.enabled = true')->shouldBeCalled()->willReturn($builder);
 
-        $this->getQueryBuidlerByStatus(false)->shouldReturn($builder);
+        $this->getQueryBuidlerForChoiceType(array(
+            'disabled' => false
+        ))->shouldReturn($builder);
     }
 
     function it_creates_query_builder_for_all_status($em, QueryBuilder $builder)
     {
         $em->createQueryBuilder()->shouldBeCalled()->willReturn($builder);
-        $builder->select('o')->shouldBeCalled()->willReturn($builder);
-        $builder->from(Argument::any(), 'o')->shouldBeCalled()->willReturn($builder);
+        $builder->select('method')->shouldBeCalled()->willReturn($builder);
+        $builder->from(Argument::any(), 'method')->shouldBeCalled()->willReturn($builder);
 
-        $this->getQueryBuidlerByStatus(true)->shouldReturn($builder);
+        $this->getQueryBuidlerForChoiceType(array(
+            'disabled' => true
+        ))->shouldReturn($builder);
     }
 }
