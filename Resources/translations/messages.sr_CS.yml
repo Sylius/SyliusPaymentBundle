@@ -5,4 +5,6 @@ sylius:
   form:
     payment:
       state:
-        header: 入金状況
+        header: Stanje plaćanja
+    payment_method:
+      name: Ime
