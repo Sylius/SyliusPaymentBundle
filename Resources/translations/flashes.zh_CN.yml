@@ -3,5 +3,5 @@
 
 sylius:
     payment:
-        complete: Betaling gennemført.
-        cancel: Betaling annulleret.
+        complete: 已完成付款。
+        cancel: 付款已被取消。
