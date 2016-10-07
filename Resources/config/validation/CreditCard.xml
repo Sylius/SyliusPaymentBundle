@@ -11,65 +11,7 @@
 
 -->
 
-<constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping
-                                        http://symfony.com/schema/dic/services/constraint-mapping-1.0.xsd">
-
-    <class name="Sylius\Component\Payment\Model\Payment">
-        <property name="currencyCode">
-            <constraint name="Currency">
-                <option name="message">sylius.payment.currency_code.not_valid</option>
-            </constraint>
-        </property>
-        <property name="method">
-            <constraint name="NotBlank">
-                <option name="message">sylius.payment.method.not_blank</option>
-                <option name="groups">sylius</option>
-            </constraint>
-        </property>
-    </class>
-
-    <class name="Sylius\Component\Payment\Model\PaymentMethod">
-        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity" >
-            <option name="fields">code</option>
-            <option name="message">sylius.payment_method.code.unique</option>
-            <option name="groups">sylius</option>
-        </constraint>
-        <property name="code">
-            <constraint name="NotBlank">
-                <option name="message">sylius.payment_method.code.not_blank</option>
-                <option name="groups">sylius</option>
-            </constraint>
-        </property>
-        <property name="translations">
-            <constraint name="Valid" />
-        </property>
-
-        <property name="gateway">
-            <constraint name="NotBlank">
-                <option name="message">sylius.payment_method.gateway.not_blank</option>
-                <option name="groups">sylius</option>
-            </constraint>
-        </property>
-    </class>
-
-    <class name="Sylius\Component\Payment\Model\PaymentMethodTranslation">
-        <property name="name">
-            <constraint name="NotBlank">
-                <option name="message">sylius.payment_method.name.not_blank</option>
-                <option name="groups">sylius</option>
-            </constraint>
-            <constraint name="Length">
-                <option name="min">2</option>
-                <option name="minMessage">sylius.payment_method.name.min_length</option>
-                <option name="max">255</option>
-                <option name="minMessage">sylius.payment_method.name.max_length</option>
-                <option name="groups">sylius</option>
-            </constraint>
-        </property>
-    </class>
-
+<constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping http://symfony.com/schema/dic/services/constraint-mapping-1.0.xsd">
     <class name="Sylius\Component\Payment\Model\CreditCard">
         <property name="number">
             <constraint name="NotBlank">
@@ -125,5 +67,4 @@
             </constraint>
         </property>
     </class>
-
 </constraint-mapping>
