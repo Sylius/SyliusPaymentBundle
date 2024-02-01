@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\PaymentBundle\Checker;
+namespace Sylius\Bundle\PaymentBundle\Processor;
 
 use Sylius\Component\Payment\Model\PaymentRequestInterface;
 
-interface PaymentRequestDuplicationCheckerInterface
+interface AfterOfflineCaptureProcessorInterface
 {
-    public function hasDuplicates(PaymentRequestInterface $paymentRequest): bool;
+    public function process(PaymentRequestInterface $paymentRequest): void;
 }
