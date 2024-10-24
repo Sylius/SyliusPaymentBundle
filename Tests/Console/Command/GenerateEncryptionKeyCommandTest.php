@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Sylius\Bundle\PaymentBundle\Tests\Console\Command;
 
 use PHPUnit\Framework\TestCase;
-use Sylius\Bundle\PaymentBundle\Console\Command\GenerateEncryptionSaltCommand;
+use Sylius\Bundle\PaymentBundle\Console\Command\GenerateEncryptionKeyCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-final class GenerateEncryptionSaltCommandTest extends TestCase
+final class GenerateEncryptionKeyCommandTest extends TestCase
 {
     private CommandTester $commandTester;
 
@@ -25,7 +25,7 @@ final class GenerateEncryptionSaltCommandTest extends TestCase
     {
         parent::setUp();
 
-        $this->commandTester = new CommandTester(new GenerateEncryptionSaltCommand());
+        $this->commandTester = new CommandTester(new GenerateEncryptionKeyCommand());
     }
 
     /** @test */
@@ -35,8 +35,8 @@ final class GenerateEncryptionSaltCommandTest extends TestCase
 
         $output = $this->commandTester->getDisplay();
 
-        $this->assertStringContainsString('Generating encryption salt for Sylius payment encryption', $output);
-        $this->assertStringContainsString('Salt:', $output);
-        $this->assertStringContainsString('Please, remember to update your configuration with this salt', $output);
+        $this->assertStringContainsString('Generating encryption key for Sylius payment encryption', $output);
+        $this->assertStringContainsString('Key:', $output);
+        $this->assertStringContainsString('Please, remember to update your configuration with this key', $output);
     }
 }

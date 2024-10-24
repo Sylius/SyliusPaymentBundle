@@ -18,8 +18,7 @@
 >
     <services>
         <service id="sylius.encrypter" class="Sylius\Component\Payment\Encryption\Encrypter">
-            <argument>%env(SYLIUS_PAYMENT_ENCRYPTION_PASSWORD)%</argument>
-            <argument>%env(SYLIUS_PAYMENT_ENCRYPTION_SALT)%</argument>
+            <argument>%env(SYLIUS_PAYMENT_ENCRYPTION_KEY)%</argument>
         </service>
         <service id="Sylius\Component\Payment\Encryption\EncrypterInterface" alias="sylius.encrypter" />
 
@@ -48,7 +47,7 @@
             <tag name="doctrine.event_listener" event="postLoad" />
         </service>
 
-        <service id="sylius.console.command.generate_encryption_salt" class="Sylius\Bundle\PaymentBundle\Console\Command\GenerateEncryptionSaltCommand">
+        <service id="sylius.console.command.generate_encryption_salt" class="Sylius\Bundle\PaymentBundle\Console\Command\GenerateEncryptionKeyCommand">
             <tag name="console.command" />
         </service>
     </services>
