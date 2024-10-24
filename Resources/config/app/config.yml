@@ -4,6 +4,9 @@
 imports:
     - { resource: "@SyliusPaymentBundle/Resources/config/app/messenger.yaml" }
 
+parameters:
+    env(SYLIUS_PAYMENT_ENCRYPTION_KEY_PATH): '%kernel.project_dir%/config/encryption/key'
+
 sylius_payment:
     payment_request:
         states_to_be_cancelled_when_payment_method_changed:
