@@ -53,7 +53,7 @@ final class Configuration implements ConfigurationInterface
                 ->arrayNode('encryption')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->booleanNode('enabled')->defaultValue(true)->end()
+                        ->booleanNode('enabled')->defaultTrue()->end()
                         ->arrayNode('disabled_for_factories')
                             ->scalarPrototype()->end()
                         ->end()
