@@ -2,8 +2,8 @@
 # (c) Sylius Sp. z o.o.
 
 parameters:
-    env(SYLIUS_MESSENGER_TRANSPORT_PAYMENT_REQUEST_DSN): 'doctrine://default?queue_name=payment_request'
-    env(SYLIUS_MESSENGER_TRANSPORT_PAYMENT_REQUEST_FAILED_DSN): 'doctrine://default?queue_name=payment_request_failed'
+    env(SYLIUS_MESSENGER_TRANSPORT_PAYMENT_REQUEST_DSN): 'sync://'
+    env(SYLIUS_MESSENGER_TRANSPORT_PAYMENT_REQUEST_FAILED_DSN): 'sync://'
 
     sylius_messenger_transport_payment_request_dsn: '%env(resolve:SYLIUS_MESSENGER_TRANSPORT_PAYMENT_REQUEST_DSN)%'
     sylius_messenger_transport_payment_request_failed_dsn: '%env(resolve:SYLIUS_MESSENGER_TRANSPORT_PAYMENT_REQUEST_FAILED_DSN)%'
