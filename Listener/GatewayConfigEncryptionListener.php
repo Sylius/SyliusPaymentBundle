@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\PaymentBundle\Listener;
 
+use Sylius\Bundle\PaymentBundle\Checker\GatewayConfigEncryptionCheckerInterface;
 use Sylius\Component\Payment\Encryption\EntityEncrypterInterface;
 use Sylius\Component\Payment\Model\GatewayConfigInterface;
 
@@ -26,12 +27,11 @@ final class GatewayConfigEncryptionListener extends EntityEncryptionListener
     /**
      * @param EntityEncrypterInterface<GatewayConfigInterface> $entityEncrypter
      * @param class-string $entityClass
-     * @param array<string> $disabledGatewayFactories
      */
     public function __construct(
         EntityEncrypterInterface $entityEncrypter,
         string $entityClass,
-        private readonly array $disabledGatewayFactories,
+        private readonly GatewayConfigEncryptionCheckerInterface $gatewayConfigEncryptionChecker,
     ) {
         parent::__construct($entityEncrypter, $entityClass);
     }
@@ -40,7 +40,7 @@ final class GatewayConfigEncryptionListener extends EntityEncryptionListener
     {
         return
             parent::supports($entity) &&
-            !in_array($entity->getFactoryName(), $this->disabledGatewayFactories, true)
+            $this->gatewayConfigEncryptionChecker->isEncryptionEnabled($entity)
         ;
     }
 }
