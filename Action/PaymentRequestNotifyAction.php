@@ -42,9 +42,7 @@ final class PaymentRequestNotifyAction
 
     public function __invoke(Request $request, string $hash): Response
     {
-        $paymentRequest = $this->paymentRequestRepository->findOneBy([
-            'hash' => $hash,
-        ]);
+        $paymentRequest = $this->paymentRequestRepository->find($hash);
 
         if (null === $paymentRequest) {
             throw new NotFoundHttpException(sprintf('No payment request found with hash "%s".', $hash));

@@ -15,6 +15,8 @@ namespace Sylius\Bundle\PaymentBundle\Doctrine\ORM;
 
 use Doctrine\ORM\QueryBuilder;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Sylius\Component\Payment\Model\PaymentInterface;
+use Sylius\Component\Payment\Model\PaymentMethodInterface;
 use Sylius\Component\Payment\Model\PaymentRequestInterface;
 use Sylius\Component\Payment\Repository\PaymentRequestRepositoryInterface;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -65,8 +67,8 @@ class PaymentRequestRepository extends EntityRepository implements PaymentReques
             ->andWhere('o.method = :method')
             ->setParameter('paymentRequest', $paymentRequest->getHash(), UuidType::NAME)
             ->setParameter('action', $paymentRequest->getAction())
-            ->setParameter('method', $paymentRequest->getMethod())
             ->setParameter('payment', $paymentRequest->getPayment())
+            ->setParameter('method', $paymentRequest->getMethod())
             ->getQuery()
             ->getResult()
         ;
@@ -88,6 +90,27 @@ class PaymentRequestRepository extends EntityRepository implements PaymentReques
             ->setParameter('states', $states)
             ->getQuery()
             ->getResult()
+        ;
+    }
+
+    public function findOneByActionPaymentAndMethod(
+        string $action,
+        PaymentInterface $payment,
+        PaymentMethodInterface $paymentMethod,
+    ): ?PaymentRequestInterface {
+        $queryBuilder = $this->createQueryBuilder('o');
+
+        return $queryBuilder
+            ->innerJoin('o.payment', 'payment')
+            ->innerJoin('o.method', 'method')
+            ->andWhere('o.action = :action')
+            ->andWhere('o.payment = :payment')
+            ->andWhere('o.method = :method')
+            ->setParameter('action', $action)
+            ->setParameter('payment', $payment)
+            ->setParameter('method', $paymentMethod)
+            ->getQuery()
+            ->getOneOrNullResult()
         ;
     }
 }
