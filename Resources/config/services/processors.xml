@@ -22,10 +22,10 @@
         </service>
         <service id="Sylius\Bundle\PaymentBundle\Processor\NotifyPayloadProcessorInterface" alias="sylius.processor.notify_payload" />
 
-        <service id="sylius.processor.payment_request.http_response" class="Sylius\Bundle\PaymentBundle\Processor\HttpResponseProcessor">
+        <service id="sylius.processor.http_response" class="Sylius\Bundle\PaymentBundle\Processor\HttpResponseProcessor">
             <argument type="service" id="sylius.announcer.payment_request" />
             <argument type="service" id="sylius.provider.http_response.default" />
         </service>
-        <service id="Sylius\Bundle\PaymentBundle\Processor\HttpResponseProcessorInterface" alias="sylius.processor.payment_request.http_response" />
+        <service id="Sylius\Bundle\PaymentBundle\Processor\HttpResponseProcessorInterface" alias="sylius.processor.http_response" />
     </services>
 </container>
