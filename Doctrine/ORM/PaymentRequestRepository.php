@@ -98,9 +98,7 @@ class PaymentRequestRepository extends EntityRepository implements PaymentReques
         PaymentInterface $payment,
         PaymentMethodInterface $paymentMethod,
     ): ?PaymentRequestInterface {
-        $queryBuilder = $this->createQueryBuilder('o');
-
-        return $queryBuilder
+        return $this->createQueryBuilder('o')
             ->innerJoin('o.payment', 'payment')
             ->innerJoin('o.method', 'method')
             ->andWhere('o.action = :action')
