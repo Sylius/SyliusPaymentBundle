@@ -21,6 +21,6 @@ interface HttpResponseProcessorInterface
 {
     public function process(
         RequestConfiguration $requestConfiguration,
-        PaymentRequestInterface $paymentRequest
+        PaymentRequestInterface $paymentRequest,
     ): ?Response;
 }

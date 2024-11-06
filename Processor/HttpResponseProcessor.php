@@ -29,7 +29,7 @@ final class HttpResponseProcessor implements HttpResponseProcessorInterface
 
     public function process(
         RequestConfiguration $requestConfiguration,
-        PaymentRequestInterface $paymentRequest
+        PaymentRequestInterface $paymentRequest,
     ): ?Response {
         $this->paymentRequestAnnouncer->dispatchPaymentRequestCommand($paymentRequest);
 
