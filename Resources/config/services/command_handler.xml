@@ -22,5 +22,10 @@
             <argument type="service" id="sylius_abstraction.state_machine" />
             <tag name="messenger.message_handler" bus="sylius.payment_request.command_bus" />
         </service>
+        <service id="sylius.command_handler.offline.status_payment_request" class="Sylius\Bundle\PaymentBundle\CommandHandler\Offline\StatusPaymentRequestHandler">
+            <argument type="service" id="sylius.provider.payment_request" />
+            <argument type="service" id="sylius_abstraction.state_machine" />
+            <tag name="messenger.message_handler" bus="sylius.payment_request.command_bus" />
+        </service>
     </services>
 </container>
