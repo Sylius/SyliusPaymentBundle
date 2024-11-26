@@ -13,19 +13,47 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\PaymentBundle\Provider;
 
+use Sylius\Component\Core\Repository\PaymentMethodRepositoryInterface;
 use Sylius\Component\Payment\Model\GatewayConfigInterface;
+use Sylius\Component\Core\Model\PaymentMethodInterface;
 use Sylius\Component\Payment\Model\PaymentRequestInterface;
 
 /** @experimental */
-final class DefaultActionProvider implements DefaultActionProviderInterface
+final readonly class DefaultActionProvider implements DefaultActionProviderInterface
 {
+    /**
+     * @param PaymentMethodRepositoryInterface<PaymentMethodInterface> $paymentMethodRepository
+     */
+    public function __construct(
+        private PaymentMethodRepositoryInterface $paymentMethodRepository,
+        private string $defaultAction,
+    ) {
+    }
+
     public function getAction(PaymentRequestInterface $paymentRequest): string
     {
+        /** @var PaymentMethodInterface $paymentMethod */
         $paymentMethod = $paymentRequest->getMethod();
+        return $this->getActionFromPaymentMethod($paymentMethod, $paymentRequest->getAction());
+    }
+
+    public function getActionFromPaymentMethodCode(string $paymentMethodCode, ?string $defaultAction = null): string
+    {
+        /** @var PaymentMethodInterface|null $paymentMethod */
+        $paymentMethod = $this->paymentMethodRepository->findOneBy(['code' => $paymentMethodCode]);
+        if (null === $paymentMethod) {
+            return $defaultAction ?? $this->defaultAction;
+        }
+
+        return $this->getActionFromPaymentMethod($paymentMethod, $defaultAction);
+    }
+
+    public function getActionFromPaymentMethod(PaymentMethodInterface $paymentMethod, ?string $defaultAction = null): string
+    {
         /** @var GatewayConfigInterface $gatewayConfig */
         $gatewayConfig = $paymentMethod->getGatewayConfig();
         $authorize = $gatewayConfig->getConfig()['use_authorize'] ?? false;
 
-        return $authorize ? PaymentRequestInterface::ACTION_AUTHORIZE : $paymentRequest->getAction();
+        return $authorize ? PaymentRequestInterface::ACTION_AUTHORIZE : $defaultAction ?? $this->defaultAction;
     }
 }
