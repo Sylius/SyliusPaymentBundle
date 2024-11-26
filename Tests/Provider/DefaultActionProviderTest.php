@@ -26,7 +26,7 @@ use Sylius\Component\Payment\Model\PaymentRequestInterface;
 
 final class DefaultActionProviderTest extends TestCase
 {
-    private PaymentMethodRepositoryInterface&MockObject $paymentMethodRepository;
+    private PaymentMethodRepositoryInterface|MockObject $paymentMethodRepository;
 
     protected function setUp(): void
     {
@@ -106,7 +106,7 @@ final class DefaultActionProviderTest extends TestCase
         return new DefaultActionProvider($this->paymentMethodRepository, PaymentRequestInterface::ACTION_CAPTURE);
     }
 
-    private static function getConfigAndExpectation(): iterable
+    public static function getConfigAndExpectation(): iterable
     {
         yield [
             [], PaymentRequestInterface::ACTION_CAPTURE,
