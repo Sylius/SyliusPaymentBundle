@@ -26,7 +26,7 @@ use Sylius\Component\Payment\Model\PaymentRequestInterface;
 
 final class DefaultActionProviderTest extends TestCase
 {
-    private PaymentMethodRepositoryInterface|MockObject $paymentMethodRepository;
+    private MockObject|PaymentMethodRepositoryInterface $paymentMethodRepository;
 
     protected function setUp(): void
     {
@@ -83,7 +83,7 @@ final class DefaultActionProviderTest extends TestCase
         $method = new PaymentMethod();
         $method->setGatewayConfig($gatewayConfig);
 
-        $this->paymentMethodRepository->expects($this->once())->method('findOneBy')->with(['code'=>'cash_on_delivery'])->willReturn($method);
+        $this->paymentMethodRepository->expects($this->once())->method('findOneBy')->with(['code' => 'cash_on_delivery'])->willReturn($method);
 
         $provider = $this->createProvider();
         $action = $provider->getActionFromPaymentMethodCode('cash_on_delivery');
@@ -93,7 +93,7 @@ final class DefaultActionProviderTest extends TestCase
 
     public function test_it_provides_capture_action_if_payment_method_is_not_found(): void
     {
-        $this->paymentMethodRepository->expects($this->once())->method('findOneBy')->with(['code'=>'cash_on_delivery'])->willReturn(null);
+        $this->paymentMethodRepository->expects($this->once())->method('findOneBy')->with(['code' => 'cash_on_delivery'])->willReturn(null);
 
         $provider = $this->createProvider();
         $action = $provider->getActionFromPaymentMethodCode('cash_on_delivery');
