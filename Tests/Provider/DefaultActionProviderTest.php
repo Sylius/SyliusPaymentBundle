@@ -17,12 +17,12 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\PaymentBundle\Provider\DefaultActionProvider;
 use Sylius\Bundle\PaymentBundle\Provider\DefaultActionProviderInterface;
-use Sylius\Component\Core\Model\Payment;
-use Sylius\Component\Core\Model\PaymentMethod;
-use Sylius\Component\Core\Repository\PaymentMethodRepositoryInterface;
 use Sylius\Component\Payment\Model\GatewayConfig;
+use Sylius\Component\Payment\Model\Payment;
+use Sylius\Component\Payment\Model\PaymentMethod;
 use Sylius\Component\Payment\Model\PaymentRequest;
 use Sylius\Component\Payment\Model\PaymentRequestInterface;
+use Sylius\Component\Payment\Repository\PaymentMethodRepositoryInterface;
 
 final class DefaultActionProviderTest extends TestCase
 {

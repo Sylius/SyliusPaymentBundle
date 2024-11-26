@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\PaymentBundle\Provider;
 
-use Sylius\Component\Core\Model\PaymentMethodInterface;
-use Sylius\Component\Core\Repository\PaymentMethodRepositoryInterface;
 use Sylius\Component\Payment\Model\GatewayConfigInterface;
+use Sylius\Component\Payment\Model\PaymentMethodInterface;
 use Sylius\Component\Payment\Model\PaymentRequestInterface;
+use Sylius\Component\Payment\Repository\PaymentMethodRepositoryInterface;
 
 /** @experimental */
 final readonly class DefaultActionProvider implements DefaultActionProviderInterface
@@ -32,7 +32,6 @@ final readonly class DefaultActionProvider implements DefaultActionProviderInter
 
     public function getAction(PaymentRequestInterface $paymentRequest): string
     {
-        /** @var PaymentMethodInterface $paymentMethod */
         $paymentMethod = $paymentRequest->getMethod();
 
         return $this->getActionFromPaymentMethod($paymentMethod, $paymentRequest->getAction());
