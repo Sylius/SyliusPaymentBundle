@@ -27,7 +27,7 @@
 
         <service id="sylius.provider.payment_request.http_response.gateway_factory" class="Sylius\Bundle\PaymentBundle\Provider\GatewayFactoryHttpResponseProvider">
             <argument type="service" id="sylius.provider.payment_request.gateway_factory_name" />
-            <argument type="tagged_locator" tag="sylius.payment_request.provider.http_response" index-by="gateway-factory" />
+            <argument type="tagged_locator" tag="sylius.payment_request.provider.http_response" index-by="gateway_factory" />
         </service>
         <service id="sylius.provider.http_response.default" alias="sylius.provider.payment_request.http_response.gateway_factory" />
 
