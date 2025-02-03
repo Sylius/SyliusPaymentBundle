@@ -22,7 +22,12 @@ use Sylius\Bundle\PaymentBundle\Tests\Stub\GatewayConfigurationTypeStub;
 use Sylius\Bundle\PaymentBundle\Tests\Stub\NotifyPaymentProviderStub;
 use Sylius\Bundle\PaymentBundle\Tests\Stub\PaymentMethodsResolverStub;
 use Sylius\Component\Payment\Model\PaymentRequestInterface;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
 {
@@ -165,6 +170,49 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
         $this->compile();
 
         $this->assertContainerBuilderNotHasService('sylius.encrypter');
+    }
+
+    /**
+     * @test
+     * @dataProvider getCommandProviderLoader
+     */
+    public function it_allows_adding_a_gateway_factory_command_provider_using_yaml(string $loaderClass, string $serviceFileDefinition): void
+    {
+        $this->load();
+
+        $fileLocator = new FileLocator(__DIR__ . '/../Resources/config');
+        $loader = new $loaderClass($this->container, $fileLocator);
+        $loader->load($serviceFileDefinition);
+
+        $this->compile();
+
+        /** @var ServiceLocatorArgument $serviceLocatorArgument */
+        $serviceLocatorArgument = $this->container->getDefinition('sylius.command_provider.gateway_factory')->getArgument(2);
+
+        $tag = $serviceLocatorArgument->getTaggedIteratorArgument()->getTag();
+        $indexAttribute = $serviceLocatorArgument->getTaggedIteratorArgument()->getIndexAttribute();
+
+        $foundServices = [];
+        foreach ($this->container->findTaggedServiceIds($tag) as $serviceId=>$tags) {
+            foreach ($tags as $attributes) {
+                $this->assertArrayHasKey($indexAttribute, $attributes);
+                $foundServices[$serviceId] = $attributes;
+            }
+        }
+
+        $this->assertArrayHasKey('acme.sylius_example.sylius_payment', $foundServices);
+    }
+
+    public static function getCommandProviderLoader(): iterable
+    {
+        yield 'Load YAML' => [
+            YamlFileLoader::class,
+            'gateway_command_provider.yaml'
+        ];
+        yield 'Load XML' => [
+            XmlFileLoader::class,
+            'gateway_command_provider.xml'
+        ];
     }
 
     protected function getContainerExtensions(): array
