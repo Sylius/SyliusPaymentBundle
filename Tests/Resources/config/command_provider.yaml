@@ -1,5 +1,5 @@
 services:
-    acme.sylius_example.sylius_payment:
+    acme.sylius_example.command_provider.sylius_payment:
         class: Sylius\Bundle\PaymentBundle\CommandProvider\ActionsCommandProvider
         arguments:
             - !tagged_locator
