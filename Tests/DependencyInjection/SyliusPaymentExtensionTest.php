@@ -173,6 +173,7 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
 
     /**
      * @test
+     *
      * @dataProvider getCommandProviderLoader
      */
     public function it_allows_adding_a_gateway_factory_command_provider_using_yaml(string $loaderClass, string $serviceFileDefinition): void
@@ -192,7 +193,7 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
         $indexAttribute = $serviceLocatorArgument->getTaggedIteratorArgument()->getIndexAttribute();
 
         $foundServices = [];
-        foreach ($this->container->findTaggedServiceIds($tag) as $serviceId=>$tags) {
+        foreach ($this->container->findTaggedServiceIds($tag) as $serviceId => $tags) {
             foreach ($tags as $attributes) {
                 $this->assertArrayHasKey($indexAttribute, $attributes);
                 $foundServices[$serviceId] = $attributes;
@@ -204,6 +205,7 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
 
     /**
      * @test
+     *
      * @dataProvider getHttpResponseProviderLoader
      */
     public function it_allows_adding_a_gateway_factory_http_response_provider_using_yaml(string $loaderClass, string $serviceFileDefinition): void
@@ -223,7 +225,7 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
         $indexAttribute = $serviceLocatorArgument->getTaggedIteratorArgument()->getIndexAttribute();
 
         $foundServices = [];
-        foreach ($this->container->findTaggedServiceIds($tag) as $serviceId=>$tags) {
+        foreach ($this->container->findTaggedServiceIds($tag) as $serviceId => $tags) {
             foreach ($tags as $attributes) {
                 $this->assertArrayHasKey($indexAttribute, $attributes);
                 $foundServices[$serviceId] = $attributes;
@@ -237,11 +239,11 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
     {
         yield 'Load YAML' => [
             YamlFileLoader::class,
-            'command_provider.yaml'
+            'command_provider.yaml',
         ];
         yield 'Load XML' => [
             XmlFileLoader::class,
-            'command_provider.xml'
+            'command_provider.xml',
         ];
     }
 
@@ -249,11 +251,11 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
     {
         yield 'Load YAML' => [
             YamlFileLoader::class,
-            'http_response_provider.yaml'
+            'http_response_provider.yaml',
         ];
         yield 'Load XML' => [
             XmlFileLoader::class,
-            'http_response_provider.xml'
+            'http_response_provider.xml',
         ];
     }
 
