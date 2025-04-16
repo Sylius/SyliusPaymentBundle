@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Definition;
 
 final class RegisterGatewayConfigTypePassTest extends AbstractCompilerPassTestCase
 {
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_registers_payment_gateways_configs_by_their_priority_in_the_registry(): void
     {
         $this->setDefinition('sylius.form_registry.payment_gateway_config', new Definition());
@@ -75,7 +75,7 @@ final class RegisterGatewayConfigTypePassTest extends AbstractCompilerPassTestCa
         );
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_registers_payment_gateways_configs_with_default_priorities_in_the_registry(): void
     {
         $this->setDefinition('sylius.form_registry.payment_gateway_config', new Definition());

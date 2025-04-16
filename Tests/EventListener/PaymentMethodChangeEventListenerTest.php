@@ -24,7 +24,7 @@ use Sylius\Component\Payment\Model\PaymentMethodInterface;
 
 final class PaymentMethodChangeEventListenerTest extends TestCase
 {
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_updates_payment_request_when_the_payment_has_changed_payment_method(): void
     {
         $paymentRequestCanceller = $this->createMock(PaymentRequestCancellerInterface::class);
@@ -59,7 +59,7 @@ final class PaymentMethodChangeEventListenerTest extends TestCase
         $listener->postUpdate($args);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_does_not_update_if_entity_is_not_payment(): void
     {
         $paymentRequestCanceller = $this->createMock(PaymentRequestCancellerInterface::class);
@@ -75,7 +75,7 @@ final class PaymentMethodChangeEventListenerTest extends TestCase
         $listener->postUpdate($args);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_does_not_update_if_payment_method_did_not_change(): void
     {
         $paymentRequestCanceller = $this->createMock(PaymentRequestCancellerInterface::class);

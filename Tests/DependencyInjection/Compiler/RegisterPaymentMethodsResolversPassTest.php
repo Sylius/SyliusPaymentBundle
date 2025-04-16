@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 final class RegisterPaymentMethodsResolversPassTest extends AbstractCompilerPassTestCase
 {
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_registers_resolvers_in_the_registry(): void
     {
         $this->setDefinition('sylius.registry.payment_methods_resolver', new Definition());
@@ -46,7 +46,7 @@ final class RegisterPaymentMethodsResolversPassTest extends AbstractCompilerPass
         );
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_parameter_which_maps_resolvers(): void
     {
         $this->setDefinition('sylius.registry.payment_methods_resolver', new Definition());

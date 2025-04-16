@@ -19,7 +19,7 @@ use Sylius\Component\Payment\Model\GatewayConfigInterface;
 
 final class GatewayConfigEncryptionCheckerTest extends TestCase
 {
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_cannot_encrypt_if_factory_name_is_in_disabled_factories(): void
     {
         $gatewayConfig = $this->createMock(GatewayConfigInterface::class);
@@ -29,7 +29,7 @@ final class GatewayConfigEncryptionCheckerTest extends TestCase
         $this->assertFalse($checker->isEncryptionEnabled($gatewayConfig));
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_encrypt_if_factory_name_is_not_in_disabled_factories(): void
     {
         $gatewayConfig = $this->createMock(GatewayConfigInterface::class);

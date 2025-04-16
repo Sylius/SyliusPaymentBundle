@@ -33,9 +33,7 @@ final class DefaultActionProviderTest extends TestCase
         $this->paymentMethodRepository = $this->createMock(PaymentMethodRepositoryInterface::class);
     }
 
-    /**
-     * @dataProvider getConfigAndExpectation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getConfigAndExpectation')]
     public function test_it_provides_action_with_a_payment_request(array $config, string $expectedAction): void
     {
         $gatewayConfig = new GatewayConfig();
@@ -55,9 +53,7 @@ final class DefaultActionProviderTest extends TestCase
         $this->assertSame($expectedAction, $action);
     }
 
-    /**
-     * @dataProvider getConfigAndExpectation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getConfigAndExpectation')]
     public function test_it_provides_action_with_a_payment_method(array $config, string $expectedAction): void
     {
         $gatewayConfig = new GatewayConfig();
@@ -72,9 +68,7 @@ final class DefaultActionProviderTest extends TestCase
         $this->assertSame($expectedAction, $action);
     }
 
-    /**
-     * @dataProvider getConfigAndExpectation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getConfigAndExpectation')]
     public function test_it_provides_action_with_a_payment_method_code(array $config, string $expectedAction): void
     {
         $gatewayConfig = new GatewayConfig();

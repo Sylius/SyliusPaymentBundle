@@ -21,9 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class NotifyPayloadProcessorTest extends TestCase
 {
-    /**
-     * @dataProvider getNormalizedRequestAndPayloadWithExpectation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getNormalizedRequestAndPayloadWithExpectation')]
     public function test_process(array $normalizedRequest, mixed $payload, mixed $expectedPayload = null): void
     {
         $requestNormalizer = $this->createMock(SymfonyRequestNormalizerInterface::class);
