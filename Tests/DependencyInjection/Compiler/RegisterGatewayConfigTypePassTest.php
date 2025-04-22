@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\PaymentBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\Attributes\Test;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Sylius\Bundle\PaymentBundle\DependencyInjection\Compiler\RegisterGatewayConfigTypePass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,7 +21,7 @@ use Symfony\Component\DependencyInjection\Definition;
 
 final class RegisterGatewayConfigTypePassTest extends AbstractCompilerPassTestCase
 {
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_registers_payment_gateways_configs_by_their_priority_in_the_registry(): void
     {
         $this->setDefinition('sylius.form_registry.payment_gateway_config', new Definition());
@@ -75,7 +76,7 @@ final class RegisterGatewayConfigTypePassTest extends AbstractCompilerPassTestCa
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_registers_payment_gateways_configs_with_default_priorities_in_the_registry(): void
     {
         $this->setDefinition('sylius.form_registry.payment_gateway_config', new Definition());

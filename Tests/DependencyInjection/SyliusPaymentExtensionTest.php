@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\PaymentBundle\Tests\DependencyInjection;
 
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Sylius\Bundle\PaymentBundle\Attribute\AsGatewayConfigurationType;
 use Sylius\Bundle\PaymentBundle\Attribute\AsNotifyPaymentProvider;
@@ -30,7 +32,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
 {
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_autoconfigures_payment_methods_resolver_with_attribute(): void
     {
         $this->container->setDefinition(
@@ -50,7 +52,7 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_autoconfigures_gateway_configuration_type_with_attribute(): void
     {
         $this->container->setDefinition(
@@ -70,7 +72,7 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_autoconfigures_payment_notify_provider_with_attribute(): void
     {
         $this->container->setDefinition(
@@ -90,7 +92,7 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_loads_gateway_config_validation_groups_parameter_value_properly(): void
     {
         $this->load([
@@ -108,7 +110,7 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_loads_parameter_with_payment_request_states_that_should_be_cancelled_when_payment_method_is_changed(): void
     {
         $this->load([
@@ -126,7 +128,7 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_loads_encryption_services_when_encryption_is_enabled(): void
     {
         $this->load([
@@ -143,7 +145,7 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasService('sylius.encrypter');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_populates_encryption_disabled_for_factories_parameter(): void
     {
         $this->load([
@@ -155,7 +157,7 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasParameter('sylius.encryption.disabled_for_factories', ['paypal_express_checkout']);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_does_not_load_encryption_services_when_encryption_is_disabled(): void
     {
         $this->load([
@@ -172,8 +174,8 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
     }
 
     
-    #[\PHPUnit\Framework\Attributes\DataProvider('getCommandProviderLoader')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProvider('getCommandProviderLoader')]
+    #[Test]
     public function it_allows_adding_a_gateway_factory_command_provider_using_yaml(string $loaderClass, string $serviceFileDefinition): void
     {
         $this->load();
@@ -202,8 +204,8 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
     }
 
     
-    #[\PHPUnit\Framework\Attributes\DataProvider('getHttpResponseProviderLoader')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProvider('getHttpResponseProviderLoader')]
+    #[Test]
     public function it_allows_adding_a_gateway_factory_http_response_provider_using_yaml(string $loaderClass, string $serviceFileDefinition): void
     {
         $this->load();
