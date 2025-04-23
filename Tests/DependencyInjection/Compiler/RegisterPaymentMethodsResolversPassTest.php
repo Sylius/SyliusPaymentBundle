@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\PaymentBundle\Tests\DependencyInjection\Compiler;
 
-use PHPUnit\Framework\Attributes\Test;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Sylius\Bundle\PaymentBundle\DependencyInjection\Compiler\RegisterPaymentMethodsResolversPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

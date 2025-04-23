@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\PaymentBundle\Tests\EventListener;
 
-use PHPUnit\Framework\Attributes\Test;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\UnitOfWork;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\PaymentBundle\EventListener\PaymentMethodChangeEventListener;
 use Sylius\Component\Payment\Canceller\PaymentRequestCancellerInterface;

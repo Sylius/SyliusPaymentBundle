@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\PaymentBundle\Tests\DependencyInjection;
 
-use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Sylius\Bundle\PaymentBundle\Attribute\AsGatewayConfigurationType;
 use Sylius\Bundle\PaymentBundle\Attribute\AsNotifyPaymentProvider;
 use Sylius\Bundle\PaymentBundle\Attribute\AsPaymentMethodsResolver;
@@ -173,7 +173,6 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderNotHasService('sylius.encrypter');
     }
 
-    
     #[DataProvider('getCommandProviderLoader')]
     #[Test]
     public function it_allows_adding_a_gateway_factory_command_provider_using_yaml(string $loaderClass, string $serviceFileDefinition): void
@@ -203,7 +202,6 @@ final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
         $this->assertArrayHasKey('acme.sylius_example.command_provider.sylius_payment', $foundServices);
     }
 
-    
     #[DataProvider('getHttpResponseProviderLoader')]
     #[Test]
     public function it_allows_adding_a_gateway_factory_http_response_provider_using_yaml(string $loaderClass, string $serviceFileDefinition): void

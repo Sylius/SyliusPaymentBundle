@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\PaymentBundle\Tests\DependencyInjection;
 
-use PHPUnit\Framework\Attributes\Test;
 use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\PaymentBundle\DependencyInjection\Configuration;
 
