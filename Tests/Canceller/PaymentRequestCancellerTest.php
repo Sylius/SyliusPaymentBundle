@@ -24,6 +24,10 @@ use Sylius\Component\Payment\Repository\PaymentRequestRepositoryInterface;
 
 final class PaymentRequestCancellerTest extends TestCase
 {
+    private const STATE_MACHINE_GRAPH = 'sylius_payment_request';
+
+    private const CANCEL_TRANSITION = 'cancel';
+
     private MockObject&PaymentRequestRepositoryInterface $paymentRequestRepository;
 
     private MockObject&StateMachineInterface $stateMachine;
@@ -83,8 +87,8 @@ final class PaymentRequestCancellerTest extends TestCase
             ->method('apply')
             ->with(
                 $paymentRequest1,
-                'sylius_payment_request',
-                'cancel',
+                self::STATE_MACHINE_GRAPH,
+                self::CANCEL_TRANSITION,
                 [],
             );
 
@@ -107,7 +111,7 @@ final class PaymentRequestCancellerTest extends TestCase
             ->with(1, [PaymentRequestInterface::STATE_NEW, PaymentRequestInterface::STATE_PROCESSING])
             ->willReturn([]);
 
-        $this->stateMachine->expects(self::never())->method('apply')->with($this->any());
+        $this->stateMachine->expects(self::never())->method('apply');
 
         $this->paymentRequestCanceller->cancelPaymentRequests(1, 'payment_method_code');
     }
