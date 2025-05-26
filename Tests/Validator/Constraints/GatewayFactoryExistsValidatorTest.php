@@ -45,11 +45,9 @@ final class GatewayFactoryExistsValidatorTest extends TestCase
         /** @var Constraint&MockObject $constraint */
         $constraint = $this->createMock(Constraint::class);
 
-        $value = 'some_gateway';
-
         self::expectException(UnexpectedTypeException::class);
 
-        $this->gatewayFactoryExistsValidator->validate($value, $constraint);
+        $this->gatewayFactoryExistsValidator->validate('some_gateway', $constraint);
     }
 
     public function testAddsViolationToGatewayConfigurationWithWrongName(): void
