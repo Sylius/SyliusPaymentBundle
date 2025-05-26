@@ -13,31 +13,37 @@ declare(strict_types=1);
 
 namespace Tests\Sylius\Bundle\PaymentBundle\Generator;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\PaymentBundle\Generator\GatewayNameGenerator;
-use PHPUnit\Framework\MockObject\MockObject;
 use Sylius\Component\Payment\Model\PaymentMethodInterface;
 
 final class GatewayNameGeneratorTest extends TestCase
 {
     private GatewayNameGenerator $gatewayNameGenerator;
+
+    private MockObject&PaymentMethodInterface $paymentMethod;
+
     protected function setUp(): void
     {
+        parent::setUp();
         $this->gatewayNameGenerator = new GatewayNameGenerator();
+        $this->paymentMethod = $this->createMock(PaymentMethodInterface::class);
     }
+
     public function testGeneratesGatewayConfigNameBasedOnPaymentMethodCode(): void
     {
-        /** @var PaymentMethodInterface|MockObject $paymentMethodMock */
-        $paymentMethodMock = $this->createMock(PaymentMethodInterface::class);
-        $paymentMethodMock->expects($this->once())->method('getCode')->willReturn('PayPal Express Checkout');
-        $this->assertSame('paypal_express_checkout', $this->gatewayNameGenerator->generate($paymentMethodMock));
+        $this->paymentMethod->expects(self::once())
+            ->method('getCode')
+            ->willReturn('PayPal Express Checkout');
+
+        self::assertSame('paypal_express_checkout', $this->gatewayNameGenerator->generate($this->paymentMethod));
     }
 
     public function testReturnsNullIfPaymentMethodCodeIsNull(): void
     {
-        /** @var PaymentMethodInterface|MockObject $paymentMethodMock */
-        $paymentMethodMock = $this->createMock(PaymentMethodInterface::class);
-        $paymentMethodMock->expects($this->once())->method('getCode')->willReturn(null);
-        $this->assertNull($this->gatewayNameGenerator->generate($paymentMethodMock));
+        $this->paymentMethod->expects(self::once())->method('getCode')->willReturn(null);
+
+        self::assertNull($this->gatewayNameGenerator->generate($this->paymentMethod));
     }
 }

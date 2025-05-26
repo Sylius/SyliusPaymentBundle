@@ -13,68 +13,102 @@ declare(strict_types=1);
 
 namespace Tests\Sylius\Bundle\PaymentBundle\Canceller;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Sylius\Bundle\PaymentBundle\Canceller\PaymentRequestCanceller;
 use Doctrine\Persistence\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sylius\Abstraction\StateMachine\StateMachineInterface;
+use Sylius\Bundle\PaymentBundle\Canceller\PaymentRequestCanceller;
 use Sylius\Component\Payment\Model\PaymentMethodInterface;
 use Sylius\Component\Payment\Model\PaymentRequestInterface;
 use Sylius\Component\Payment\Repository\PaymentRequestRepositoryInterface;
 
 final class PaymentRequestCancellerTest extends TestCase
 {
-    /**
-     * @var PaymentRequestRepositoryInterface|MockObject
-     */
-    private MockObject $paymentRequestRepositoryMock;
-    /**
-     * @var StateMachineInterface|MockObject
-     */
-    private MockObject $stateMachineMock;
-    /**
-     * @var ObjectManager|MockObject
-     */
-    private MockObject $objectManagerMock;
+    private MockObject&PaymentRequestRepositoryInterface $paymentRequestRepository;
+
+    private MockObject&StateMachineInterface $stateMachine;
+
+    private MockObject&ObjectManager $objectManager;
+
     private PaymentRequestCanceller $paymentRequestCanceller;
+
     protected function setUp(): void
     {
-        $this->paymentRequestRepositoryMock = $this->createMock(PaymentRequestRepositoryInterface::class);
-        $this->stateMachineMock = $this->createMock(StateMachineInterface::class);
-        $this->objectManagerMock = $this->createMock(ObjectManager::class);
-        $this->paymentRequestCanceller = new PaymentRequestCanceller($this->paymentRequestRepositoryMock, $this->stateMachineMock, $this->objectManagerMock, [PaymentRequestInterface::STATE_NEW, PaymentRequestInterface::STATE_PROCESSING]);
+        parent::setUp();
+        $this->paymentRequestRepository = $this->createMock(PaymentRequestRepositoryInterface::class);
+        $this->stateMachine = $this->createMock(StateMachineInterface::class);
+        $this->objectManager = $this->createMock(ObjectManager::class);
+        $this->paymentRequestCanceller = new PaymentRequestCanceller(
+            $this->paymentRequestRepository,
+            $this->stateMachine,
+            $this->objectManager,
+            [PaymentRequestInterface::STATE_NEW, PaymentRequestInterface::STATE_PROCESSING],
+        );
     }
 
     public function testCancelsPaymentRequestsIfThePaymentMethodCodeIsDifferent(): void
     {
-        /** @var PaymentRequestInterface|MockObject $paymentRequest1Mock */
-        $paymentRequest1Mock = $this->createMock(PaymentRequestInterface::class);
-        /** @var PaymentRequestInterface|MockObject $paymentRequest2Mock */
-        $paymentRequest2Mock = $this->createMock(PaymentRequestInterface::class);
-        /** @var PaymentMethodInterface|MockObject $paymentMethod1Mock */
-        $paymentMethod1Mock = $this->createMock(PaymentMethodInterface::class);
-        /** @var PaymentMethodInterface|MockObject $paymentMethod2Mock */
-        $paymentMethod2Mock = $this->createMock(PaymentMethodInterface::class);
-        $this->paymentRequestRepositoryMock->expects($this->once())->method('findByPaymentIdAndStates')->with(1, [PaymentRequestInterface::STATE_NEW, PaymentRequestInterface::STATE_PROCESSING])
-            ->willReturn([$paymentRequest1Mock, $paymentRequest2Mock])
-        ;
-        $paymentRequest1Mock->expects($this->once())->method('getMethod')->willReturn($paymentMethod1Mock);
-        $paymentMethod1Mock->expects($this->once())->method('getCode')->willReturn('payment_method_with_different_code');
-        $paymentRequest2Mock->expects($this->once())->method('getMethod')->willReturn($paymentMethod2Mock);
-        $paymentMethod2Mock->expects($this->once())->method('getCode')->willReturn('payment_method_code');
-        $this->stateMachineMock->expects($this->once())->method('apply')->with($paymentRequest1Mock, 'sylius_payment_request', 'cancel');
-        $this->stateMachineMock->expects($this->never())->method('apply')->with($paymentRequest2Mock, 'sylius_payment_request', 'cancel');
-        $this->objectManagerMock->expects($this->once())->method('persist')->with($paymentRequest1Mock);
-        $this->objectManagerMock->expects($this->never())->method('persist')->with($paymentRequest2Mock);
-        $this->objectManagerMock->expects($this->once())->method('flush')->shouldBeCalledOnce();
+        /** @var PaymentRequestInterface&MockObject $paymentRequest1 */
+        $paymentRequest1 = $this->createMock(PaymentRequestInterface::class);
+        /** @var PaymentRequestInterface&MockObject $paymentRequest2 */
+        $paymentRequest2 = $this->createMock(PaymentRequestInterface::class);
+        /** @var PaymentMethodInterface&MockObject $paymentMethod1 */
+        $paymentMethod1 = $this->createMock(PaymentMethodInterface::class);
+        /** @var PaymentMethodInterface&MockObject $paymentMethod2 */
+        $paymentMethod2 = $this->createMock(PaymentMethodInterface::class);
+
+        $this->paymentRequestRepository
+            ->expects(self::once())
+            ->method('findByPaymentIdAndStates')
+            ->with(1, [PaymentRequestInterface::STATE_NEW, PaymentRequestInterface::STATE_PROCESSING])
+            ->willReturn([$paymentRequest1, $paymentRequest2]);
+
+        $paymentRequest1->expects(self::once())
+            ->method('getMethod')
+            ->willReturn($paymentMethod1);
+
+        $paymentMethod1->expects(self::once())
+            ->method('getCode')
+            ->willReturn('payment_method_with_different_code');
+
+        $paymentRequest2->expects(self::once())
+            ->method('getMethod')
+            ->willReturn($paymentMethod2);
+
+        $paymentMethod2->expects(self::once())
+            ->method('getCode')
+            ->willReturn('payment_method_code');
+
+        $this->stateMachine->expects(self::once())
+            ->method('apply')
+            ->with(
+                $paymentRequest1,
+                'sylius_payment_request',
+                'cancel',
+                [],
+            );
+
+        $this->objectManager->expects(self::once())
+            ->method('persist')
+            ->with(self::callback(function ($object) use ($paymentRequest1) {
+                return $object === $paymentRequest1;
+            }));
+
+        $this->objectManager->expects(self::once())
+            ->method('flush');
+
         $this->paymentRequestCanceller->cancelPaymentRequests(1, 'payment_method_code');
     }
 
     public function testDoesNotCancelPaymentRequestsIfNoneFound(): void
     {
-        $this->paymentRequestRepositoryMock->expects($this->once())->method('findByPaymentIdAndStates')->with(1, [PaymentRequestInterface::STATE_NEW, PaymentRequestInterface::STATE_PROCESSING])
+        $this->paymentRequestRepository->expects(self::once())
+            ->method('findByPaymentIdAndStates')
+            ->with(1, [PaymentRequestInterface::STATE_NEW, PaymentRequestInterface::STATE_PROCESSING])
             ->willReturn([]);
-        $this->stateMachineMock->expects($this->never())->method('apply')->with($this->any());
+
+        $this->stateMachine->expects(self::never())->method('apply')->with($this->any());
+
         $this->paymentRequestCanceller->cancelPaymentRequests(1, 'payment_method_code');
     }
 }

@@ -13,42 +13,58 @@ declare(strict_types=1);
 
 namespace Tests\Sylius\Bundle\PaymentBundle\Validator\GroupsGenerator;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Sylius\Bundle\PaymentBundle\Validator\GroupsGenerator\PaymentMethodGroupsGenerator;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\PaymentBundle\Validator\GroupsGenerator\GatewayConfigGroupsGeneratorInterface;
+use Sylius\Bundle\PaymentBundle\Validator\GroupsGenerator\PaymentMethodGroupsGenerator;
 use Sylius\Component\Payment\Model\GatewayConfigInterface;
 use Sylius\Component\Payment\Model\PaymentMethodInterface;
 
 final class PaymentMethodGroupsGeneratorTest extends TestCase
 {
-    /**
-     * @var GatewayConfigGroupsGeneratorInterface|MockObject
-     */
-    private MockObject $gatewayConfigGroupsGeneratorMock;
+    private GatewayConfigGroupsGeneratorInterface&MockObject $gatewayConfigGroupsGenerator;
+
     private PaymentMethodGroupsGenerator $paymentMethodGroupsGenerator;
+
+    private MockObject&PaymentMethodInterface $paymentMethod;
+
     protected function setUp(): void
     {
-        $this->gatewayConfigGroupsGeneratorMock = $this->createMock(GatewayConfigGroupsGeneratorInterface::class);
-        $this->paymentMethodGroupsGenerator = new PaymentMethodGroupsGenerator(['sylius'], $this->gatewayConfigGroupsGeneratorMock);
+        parent::setUp();
+        $this->gatewayConfigGroupsGenerator = $this->createMock(GatewayConfigGroupsGeneratorInterface::class);
+        $this->paymentMethodGroupsGenerator = new PaymentMethodGroupsGenerator(
+            ['sylius'],
+            $this->gatewayConfigGroupsGenerator,
+        );
+        $this->paymentMethod = $this->createMock(PaymentMethodInterface::class);
     }
 
     public function testReturnsPaymentMethodValidationGroups(): void
     {
-        /** @var GatewayConfigInterface|MockObject $gatewayConfigMock */
-        $gatewayConfigMock = $this->createMock(GatewayConfigInterface::class);
-        /** @var PaymentMethodInterface|MockObject $paymentMethodMock */
-        $paymentMethodMock = $this->createMock(PaymentMethodInterface::class);
-        $paymentMethodMock->expects($this->once())->method('getGatewayConfig')->willReturn($gatewayConfigMock);
-        $this->gatewayConfigGroupsGeneratorMock->expects($this->once())->method('__invoke')->with($gatewayConfigMock)->willReturn(['paypal_express_checkout', 'sylius']);
-        $this->assertSame(['sylius', 'paypal_express_checkout'], $this($paymentMethodMock));
+        $gatewayConfig = $this->createMock(GatewayConfigInterface::class);
+
+        $this->paymentMethod
+            ->method('getGatewayConfig')
+            ->willReturn($gatewayConfig);
+
+        $this->gatewayConfigGroupsGenerator
+            ->method('__invoke')
+            ->with($gatewayConfig)
+            ->willReturn(['paypal_express_checkout', 'sylius']);
+
+        $result = ($this->paymentMethodGroupsGenerator)($this->paymentMethod);
+
+        self::assertEquals(['sylius', 'paypal_express_checkout'], $result);
     }
 
     public function testReturnsDefaultValidationGroupsIfGatewayConfigIsNull(): void
     {
-        /** @var PaymentMethodInterface|MockObject $paymentMethodMock */
-        $paymentMethodMock = $this->createMock(PaymentMethodInterface::class);
-        $paymentMethodMock->expects($this->once())->method('getGatewayConfig')->willReturn(null);
-        $this->assertSame(['sylius'], $this($paymentMethodMock));
+        $this->paymentMethod
+            ->method('getGatewayConfig')
+            ->willReturn(null);
+
+        $result = ($this->paymentMethodGroupsGenerator)($this->paymentMethod);
+
+        self::assertEquals(['sylius'], $result);
     }
 }

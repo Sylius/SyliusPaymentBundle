@@ -63,7 +63,6 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Sylius\\Bundle\\PaymentBundle\\spec\\": "spec/",
             "Tests\\Sylius\\Bundle\\PaymentBundle\\": "Tests/"
         },
         "classmap": [

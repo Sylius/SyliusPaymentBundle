@@ -13,40 +13,51 @@ declare(strict_types=1);
 
 namespace Tests\Sylius\Bundle\PaymentBundle\CommandHandler\Offline;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Sylius\Bundle\PaymentBundle\CommandHandler\Offline\CapturePaymentRequestHandler;
+use PHPUnit\Framework\TestCase;
 use Sylius\Abstraction\StateMachine\StateMachineInterface;
 use Sylius\Bundle\PaymentBundle\Command\Offline\CapturePaymentRequest;
+use Sylius\Bundle\PaymentBundle\CommandHandler\Offline\CapturePaymentRequestHandler;
 use Sylius\Bundle\PaymentBundle\Provider\PaymentRequestProviderInterface;
 use Sylius\Component\Payment\Model\PaymentRequestInterface;
 use Sylius\Component\Payment\PaymentRequestTransitions;
 
 final class CapturePaymentRequestHandlerTest extends TestCase
 {
-    /**
-     * @var PaymentRequestProviderInterface|MockObject
-     */
-    private MockObject $paymentRequestProviderMock;
-    /**
-     * @var StateMachineInterface|MockObject
-     */
-    private MockObject $stateMachineMock;
+    private MockObject&PaymentRequestProviderInterface $paymentRequestProvider;
+
+    private MockObject&StateMachineInterface $stateMachine;
+
     private CapturePaymentRequestHandler $capturePaymentRequestHandler;
+
+    private MockObject&PaymentRequestInterface $paymentRequest;
+
     protected function setUp(): void
     {
-        $this->paymentRequestProviderMock = $this->createMock(PaymentRequestProviderInterface::class);
-        $this->stateMachineMock = $this->createMock(StateMachineInterface::class);
-        $this->capturePaymentRequestHandler = new CapturePaymentRequestHandler($this->paymentRequestProviderMock, $this->stateMachineMock);
+        $this->paymentRequestProvider = $this->createMock(PaymentRequestProviderInterface::class);
+        $this->stateMachine = $this->createMock(StateMachineInterface::class);
+        $this->capturePaymentRequestHandler = new CapturePaymentRequestHandler(
+            $this->paymentRequestProvider,
+            $this->stateMachine,
+        );
+        $this->paymentRequest = $this->createMock(PaymentRequestInterface::class);
     }
 
     public function testProcessesOfflineCapture(): void
     {
-        /** @var PaymentRequestInterface|MockObject $paymentRequestMock */
-        $paymentRequestMock = $this->createMock(PaymentRequestInterface::class);
         $capturePaymentRequest = new CapturePaymentRequest('hash');
-        $this->paymentRequestProviderMock->expects($this->once())->method('provide')->with($capturePaymentRequest)->willReturn($paymentRequestMock);
-        $this->stateMachineMock->expects($this->once())->method('apply')->with($paymentRequestMock, PaymentRequestTransitions::GRAPH, PaymentRequestTransitions::TRANSITION_COMPLETE);
+        $this->paymentRequestProvider->expects(self::once())
+            ->method('provide')->with($capturePaymentRequest)
+            ->willReturn($this->paymentRequest);
+
+        $this->stateMachine->expects(self::once())
+            ->method('apply')
+            ->with(
+                $this->paymentRequest,
+                PaymentRequestTransitions::GRAPH,
+                PaymentRequestTransitions::TRANSITION_COMPLETE,
+            );
+
         $this->capturePaymentRequestHandler->__invoke($capturePaymentRequest);
     }
 }

@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Tests\Sylius\Bundle\PaymentBundle\Validator\Constraints;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Sylius\Bundle\PaymentBundle\Validator\Constraints\GatewayFactoryExistsValidator;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\PaymentBundle\Validator\Constraints\GatewayFactoryExists;
-use Sylius\Component\Payment\Model\GatewayConfigInterface;
+use Sylius\Bundle\PaymentBundle\Validator\Constraints\GatewayFactoryExistsValidator;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -25,41 +24,62 @@ use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 final class GatewayFactoryExistsValidatorTest extends TestCase
 {
-    /**
-     * @var ExecutionContextInterface|MockObject
-     */
-    private MockObject $executionContextMock;
+    private ExecutionContextInterface&MockObject $executionContext;
+
     private GatewayFactoryExistsValidator $gatewayFactoryExistsValidator;
+
     protected function setUp(): void
     {
-        $this->executionContextMock = $this->createMock(ExecutionContextInterface::class);
-        $this->gatewayFactoryExistsValidator = new GatewayFactoryExistsValidator(['paypal' => 'sylius.payum_gateway_factory.paypal', 'stripe_checkout' => 'sylius.payum_gateway_factory.stripe_checkout']);
-        $this->initialize($this->executionContextMock);
+        parent::setUp();
+        $this->executionContext = $this->createMock(ExecutionContextInterface::class);
+        $this->gatewayFactoryExistsValidator = new GatewayFactoryExistsValidator(
+            [
+                'paypal' => 'sylius.payum_gateway_factory.paypal',
+                'stripe_checkout' => 'sylius.payum_gateway_factory.stripe_checkout'],
+        );
+        $this->gatewayFactoryExistsValidator->initialize($this->executionContext);
     }
 
     public function testThrowsAnExceptionIfConstraintIsNotAnInstanceOfGatewayFactoryExists(): void
     {
-        /** @var Constraint|MockObject $constraintMock */
-        $constraintMock = $this->createMock(Constraint::class);
-        /** @var GatewayConfigInterface|MockObject $gatewayConfigMock */
-        $gatewayConfigMock = $this->createMock(GatewayConfigInterface::class);
-        $this->expectException(UnexpectedTypeException::class);
-        $this->gatewayFactoryExistsValidator->validate($gatewayConfigMock, $constraintMock);
+        /** @var Constraint&MockObject $constraint */
+        $constraint = $this->createMock(Constraint::class);
+
+        $value = 'some_gateway';
+
+        self::expectException(UnexpectedTypeException::class);
+
+        $this->gatewayFactoryExistsValidator->validate($value, $constraint);
     }
 
     public function testAddsViolationToGatewayConfigurationWithWrongName(): void
     {
-        /** @var ConstraintViolationBuilderInterface|MockObject $constraintViolationBuilderMock */
-        $constraintViolationBuilderMock = $this->createMock(ConstraintViolationBuilderInterface::class);
-        $this->executionContextMock->expects($this->once())->method('buildViolation')->with((new GatewayFactoryExists())->invalidGatewayFactory)->willReturn($constraintViolationBuilderMock);
-        $constraintViolationBuilderMock->expects($this->once())->method('setParameter')->with($this->any())->willReturn($constraintViolationBuilderMock);
-        $constraintViolationBuilderMock->expects($this->once())->method('addViolation');
+        /** @var ConstraintViolationBuilderInterface&MockObject $constraintViolationBuilder */
+        $constraintViolationBuilder = $this->createMock(ConstraintViolationBuilderInterface::class);
+
+        $this->executionContext
+            ->expects(self::once())
+            ->method('buildViolation')
+            ->with((new GatewayFactoryExists())->invalidGatewayFactory)
+            ->willReturn($constraintViolationBuilder);
+
+        $constraintViolationBuilder
+            ->expects(self::once())
+            ->method('setParameter')
+            ->with('{{ available_factories }}', 'paypal, stripe_checkout')
+            ->willReturn($constraintViolationBuilder);
+
+        $constraintViolationBuilder
+            ->expects(self::once())
+            ->method('addViolation');
+
         $this->gatewayFactoryExistsValidator->validate('wrong_factory', new GatewayFactoryExists());
     }
 
     public function testDoesNotAddViolationToGatewayConfigurationWithCorrectName(): void
     {
-        $this->executionContextMock->expects($this->never())->method('buildViolation')->with($this->any());
+        $this->executionContext->expects(self::never())->method('buildViolation')->with(self::any());
+
         $this->gatewayFactoryExistsValidator->validate('paypal', new GatewayFactoryExists());
     }
 }
