@@ -38,7 +38,11 @@ final class PaymentMethodChangeEventListener
         if (array_key_exists('method', $changeSet)) {
             [$oldMethod, $newMethod] = $changeSet['method'];
 
-            if ($oldMethod !== null && $newMethod !== null && $oldMethod !== $newMethod) {
+            if ($newMethod === null) {
+                return;
+            }
+
+            if ($oldMethod !== $newMethod) {
                 $this->paymentRequestCanceller->cancelPaymentRequests($entity->getId(), $newMethod->getCode());
             }
         }
