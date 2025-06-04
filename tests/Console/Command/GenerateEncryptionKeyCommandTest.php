@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\PaymentBundle\Tests\Console\Command;
+namespace Tests\Sylius\Bundle\PaymentBundle\Console\Command;
 
 use PHPUnit\Framework\Attributes\Test;
 use Sylius\Bundle\PaymentBundle\Console\Command\GenerateEncryptionKeyCommand;
