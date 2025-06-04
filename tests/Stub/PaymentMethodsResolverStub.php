@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\PaymentBundle\Tests\Stub;
+namespace Tests\Sylius\Bundle\PaymentBundle\Stub;
 
 use Sylius\Bundle\PaymentBundle\Attribute\AsPaymentMethodsResolver;
 use Sylius\Component\Payment\Model\PaymentInterface;
