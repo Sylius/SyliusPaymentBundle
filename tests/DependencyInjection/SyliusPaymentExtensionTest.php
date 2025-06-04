@@ -20,15 +20,15 @@ use Sylius\Bundle\PaymentBundle\Attribute\AsGatewayConfigurationType;
 use Sylius\Bundle\PaymentBundle\Attribute\AsNotifyPaymentProvider;
 use Sylius\Bundle\PaymentBundle\Attribute\AsPaymentMethodsResolver;
 use Sylius\Bundle\PaymentBundle\DependencyInjection\SyliusPaymentExtension;
-use Tests\Sylius\Bundle\PaymentBundle\Stub\GatewayConfigurationTypeStub;
-use Tests\Sylius\Bundle\PaymentBundle\Stub\NotifyPaymentProviderStub;
-use Tests\Sylius\Bundle\PaymentBundle\Stub\PaymentMethodsResolverStub;
 use Sylius\Component\Payment\Model\PaymentRequestInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Tests\Sylius\Bundle\PaymentBundle\Stub\GatewayConfigurationTypeStub;
+use Tests\Sylius\Bundle\PaymentBundle\Stub\NotifyPaymentProviderStub;
+use Tests\Sylius\Bundle\PaymentBundle\Stub\PaymentMethodsResolverStub;
 
 final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
 {
