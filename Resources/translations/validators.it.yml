@@ -18,7 +18,7 @@ sylius:
             max_length: 'Il codice CVV della carta di credito deve essere lungo almeno {{ limit }} cifre.'
             min_length: 'Il codice CVV della carta di credito non deve essere più lungo di {{ limit }} cifre.'
         expiry_year:
-            not_blank: 'Per favore seleziona l\'anno di scadenza.'
+            not_blank: 'Per favore seleziona l''anno di scadenza.'
     gateway_config:
         invalid_gateway_factory: 'Gateway factory non valida. Le factory disponibili sono {{ available_factories }}.'
         gateway_name:
@@ -40,7 +40,7 @@ sylius:
         fee_calculator_configuration:
             amount:
                 greater_than_or_equal: 'La tassa non può essere inferiore a {{ compared_value }}.'
-                not_blank: 'Per favore inserisci l\'importo della tassa.'
+                not_blank: 'Per favore inserisci l''importo della tassa.'
             percent:
                 max_range: 'La tassa percentuale non può essere superiore a {{ limit }}.'
                 min_range: 'La tassa percentuale non può essere inferiore a {{ limit }}.'
