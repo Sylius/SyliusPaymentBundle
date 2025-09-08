@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\PaymentBundle\Tests\EventListener;
+namespace Tests\Sylius\Bundle\PaymentBundle\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
@@ -102,5 +102,27 @@ final class PaymentMethodChangeEventListenerTest extends TestCase
 
         $listener = new PaymentMethodChangeEventListener($paymentRequestCanceller);
         $listener->postUpdate($args);
+    }
+
+    /** @test */
+    public function it_does_not_update_if_new_payment_method_is_null(): void
+    {
+        $paymentRequestCanceller = $this->createMock(PaymentRequestCancellerInterface::class);
+        $payment = $this->createMock(PaymentInterface::class);
+        $oldMethod = $this->createMock(PaymentMethodInterface::class);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $unitOfWork = $this->createMock(UnitOfWork::class);
+
+        $entityManager->expects($this->once())->method('getUnitOfWork')->willReturn($unitOfWork);
+        $unitOfWork->expects($this->once())
+            ->method('getEntityChangeSet')
+            ->with($payment)
+            ->willReturn(['method' => [$oldMethod, null]])
+        ;
+
+        $paymentRequestCanceller->expects($this->never())->method('cancelPaymentRequests');
+
+        $listener = new PaymentMethodChangeEventListener($paymentRequestCanceller);
+        $listener->postUpdate(new PostUpdateEventArgs($payment, $entityManager));
     }
 }

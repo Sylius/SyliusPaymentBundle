@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\PaymentBundle\Tests\Processor;
+namespace Tests\Sylius\Bundle\PaymentBundle\Processor;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;

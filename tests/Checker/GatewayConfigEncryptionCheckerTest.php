@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\PaymentBundle\Tests\Checker;
+namespace Tests\Sylius\Bundle\PaymentBundle\Checker;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

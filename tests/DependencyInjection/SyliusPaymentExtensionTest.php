@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\PaymentBundle\Tests\DependencyInjection;
+namespace Tests\Sylius\Bundle\PaymentBundle\DependencyInjection;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -20,15 +20,15 @@ use Sylius\Bundle\PaymentBundle\Attribute\AsGatewayConfigurationType;
 use Sylius\Bundle\PaymentBundle\Attribute\AsNotifyPaymentProvider;
 use Sylius\Bundle\PaymentBundle\Attribute\AsPaymentMethodsResolver;
 use Sylius\Bundle\PaymentBundle\DependencyInjection\SyliusPaymentExtension;
-use Sylius\Bundle\PaymentBundle\Tests\Stub\GatewayConfigurationTypeStub;
-use Sylius\Bundle\PaymentBundle\Tests\Stub\NotifyPaymentProviderStub;
-use Sylius\Bundle\PaymentBundle\Tests\Stub\PaymentMethodsResolverStub;
 use Sylius\Component\Payment\Model\PaymentRequestInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Tests\Sylius\Bundle\PaymentBundle\Stub\GatewayConfigurationTypeStub;
+use Tests\Sylius\Bundle\PaymentBundle\Stub\NotifyPaymentProviderStub;
+use Tests\Sylius\Bundle\PaymentBundle\Stub\PaymentMethodsResolverStub;
 
 final class SyliusPaymentExtensionTest extends AbstractExtensionTestCase
 {
